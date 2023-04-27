@@ -4,8 +4,6 @@
 Module that implements some personal data obfuscation functionality.
 """
 
-import re
-
 from typing import List
 
 
@@ -23,12 +21,12 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     fields in the log line (message)
     """
 
-    lst = message.split(separator)
-
-    for f in fields:
-        for i in range(len(lst)):
-            if lst[i].startswith(f):
-                subst = f + '=' + redaction
-                lst[i] = re.sub(lst[i], '', lst[i])
-                lst[i] = subst
-    return separator.join(lst)
+    split_mssg = [kv for kv in message.split(separator)]
+    for key_val in split_mssg:
+        for field in fields:
+            if key_val.split('=')[0] == field:
+                key = key_val.split('=')[0]
+                index = split_mssg.index(key_val)
+                split_mssg.remove(key_val)
+                split_mssg.insert(index, f'{key}={redaction}')
+    return f'{separator}'.join(split_mssg)
