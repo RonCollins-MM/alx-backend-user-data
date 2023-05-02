@@ -24,12 +24,12 @@ def unauth() -> str:
 
 
 @app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
-def forbidden() -> str:
-    """ GET /api/v1/forbidden
+def forbidden_access() -> str:
+    """GET /api/v1/forbidden
     Return:
-      - Error
+      - Error 403, forbidden access
     """
-    return abort(403)
+    abort(403, description='Forbidden Access !!')
 
 
 @app_views.route('/stats/', strict_slashes=False)
